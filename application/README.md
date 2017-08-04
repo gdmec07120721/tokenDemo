@@ -25,3 +25,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 https://cnodejs.org/topic/58c1477b06dbd608756d0bca
 
 http://element.eleme.io/#/zh-CN/component/alert
+
+https://router.vuejs.org/zh-cn/essentials/navigation.html
+
+http://www.haomou.net/2014/08/13/2014_web_token/  
