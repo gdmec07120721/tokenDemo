@@ -29,3 +29,7 @@ http://element.eleme.io/#/zh-CN/component/alert
 https://router.vuejs.org/zh-cn/essentials/navigation.html
 
 http://www.haomou.net/2014/08/13/2014_web_token/  
+
+http://ju.outofmemory.cn/entry/99459
+
+https://www.npmjs.com/package/passport-http-bearer

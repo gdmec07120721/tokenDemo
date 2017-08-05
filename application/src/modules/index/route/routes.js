@@ -2,7 +2,7 @@
 *公共路由
  */
 
-import App from './page/App'
+import App from '../page/App'
 
 const routes =  [
 	{path: '*',redirect: '/index'},

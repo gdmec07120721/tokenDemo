@@ -13,7 +13,10 @@ const getters = {
 }
 
 const mutations = {
-
+	USER(state, user){
+		console.log(user)
+		state.user = user
+	}
 }
 
 const actions = {

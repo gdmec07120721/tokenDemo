@@ -15,7 +15,7 @@
 	    <el-input type="password" v-model="loginForm.pass" auto-complete="off"></el-input>
 	  </el-form-item>
 	  <el-col :span="20" :offset="10">
-	    <el-button type="primary" @click="submitForm(loginForm)">登录</el-button>
+	    <el-button type="primary" @click="submitForm(loginForm, 'loginForm')">登录</el-button>
 	    <el-button @click="resetForm('loginForm')">重置</el-button>
 	    <router-link to="/sign" class="text" >注册</router-link>
 	  </el-col>
@@ -27,6 +27,7 @@
 
 <script>
 import axios from 'config/axios'
+import config from 'config/config'
 
 export default {
     data() {
@@ -49,16 +50,26 @@ export default {
     },
     methods: {
 
-		submitForm(formName) {
+		submitForm(formDame, formName) {
+			let self = this
+
 			if (this.isValidate()) {
 				axios({
 					url: '/users/login',
 					method: 'post',
-					data: formName
+					data: formDame
 				}).then(o => {
-					console.log(o)
+					if (o.data.rescode === 0 ) {
+						let user = o.data.resresult[0]
+						this.$store.commit('USER', user)
+						window.localStorage.setItem('token', user.token)
+						window.location.href = `//${config.URL}/index.html#/`
+					}
 				}, reject => {
-
+					this.$message({
+						message: reject,
+						type: 'warning'
+					})
 				})
 			}
 		},

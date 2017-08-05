@@ -4,10 +4,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 
-import Routes from './routes'
+import Routes from './route/routes'
 import VuexCommon from '../../store/store'
 
-import Cookie from '../../utils/cookie'
+import config from '../../config/config'
 
 Vue.config.productionTip = false
 
@@ -27,11 +27,12 @@ const router = new VueRouter({
 
 function getUserInfo(){
 	return new Promise((resolve, reject) => {
-		if (Cookie.get() && sessionStorage.getItem('sessionId')) {
-			
+		if (config.token) {
+			console.log('登录...')
+			resolve()
 		}else{
 			console.log('没有登录...')
-			resolve()
+			
 		}
 	})
 }
@@ -42,6 +43,7 @@ router.beforeEach((to, from, next) => {
 	},reject => {
 
 	})
+	next()
 })
 
 /* eslint-disable no-new */
