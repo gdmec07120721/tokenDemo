@@ -6,9 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-const passport = require('passport');// 用户认证模块passport
-const Strategy = require('passport-http-bearer').Strategy;// token验证模块
-
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -46,7 +43,6 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(passport.initialize());// 初始化passport模块
 app.use(logger('dev'));// 命令行中显示程序运行日志,便于bug调试
 //app.use(bodyParser.json());
 app.use(bodyParser.json({ 'limit':'1000000kb'}))

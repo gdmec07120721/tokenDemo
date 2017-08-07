@@ -61,7 +61,11 @@ export default {
 				}).then(o => {
 					if (o.data.rescode === 0 ) {
 						let user = o.data.resresult[0]
-						this.$store.commit('USER', user)
+						self.$store.commit('USER', user)
+						self.$message({
+							message: user.resmsg,
+							type: 'warning'
+						})
 						window.localStorage.setItem('token', user.token)
 						window.location.href = `//${config.URL}/index.html#/`
 					}

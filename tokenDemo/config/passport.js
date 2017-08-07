@@ -1,24 +1,45 @@
-const passport = require('passport');
-const Strategy = require('passport-http-bearer').Strategy;
+/*const passport = require('passport');
+const Strategy = require('passport-http-bearer').Strategy;*/
+var User = require('../models/user');
+var config = require('./config');
+var jwt = require('jsonwebtoken');
 
-const User = require('../models/user');
-const config = require('./config');
+module.exports = function(req, res, next) {
+    console.log(req.headers['_session_token'])
+    let token = req.headers['_session_token'];
 
-module.exports = function(passport) {
-    passport.use(new Strategy(
-        function(token, done) {
-        	console.log(token)
-            User.findOne({
-                token: token
-            }, function(err, user) {
-                if (err) {
-                    return done(err);
+    if (token) {
+        jwt.verify(token, config.secret, (err, decoded) => {
+            console.log(decoded)
+            if (err) {
+                res.json({
+                    rescode: 001,
+                    resmsg: '身份已过期,请重新登录！',
+                    resresult: []
+                })
+            }else{
+                if (decoded) {
+                    User.findOne({
+                        token: token
+                    }, (err, user) => {
+                        res.json({
+                            rescode: 0,
+                            resmsg: '',
+                            resresult: [{
+                                name: user.name,
+                                token: user.token
+                            }]
+                        })
+                    });
                 }
-                if (!user) {
-                    return done(null, false);
-                }
-                return done(null, user);
-            });
-        }
-    ));
+            }
+        });
+    }else{
+        res.state(401).json({
+            rescode: 401,
+            resmsg: '用户不存在！',
+            resresult: []
+        })
+        next();
+    }
 };

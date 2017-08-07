@@ -33,3 +33,5 @@ http://www.haomou.net/2014/08/13/2014_web_token/
 http://ju.outofmemory.cn/entry/99459
 
 https://www.npmjs.com/package/passport-http-bearer
+
+jsonwebtoken用法: https://www.npmjs.com/package/jsonwebtoken

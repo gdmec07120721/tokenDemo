@@ -5,8 +5,10 @@ var User = require('../models/user');
 var config = require('../config/config');
 var router = express.Router();
 
-const passport = require('passport');
-const Strategy = require('passport-http-bearer').Strategy;
+const passport = require('../config/passport')
+
+/*const passport = require('passport');
+const Strategy = require('passport-http-bearer').Strategy;*/
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -63,7 +65,6 @@ router.post('/sign', (req, res, next) => {
 								resmsg: '注册成功！',
 								resresult: [{
 									name: newuser.name,
-									pass: newuser.password,
 									token: newuser.token
 								}]
 							});
@@ -77,7 +78,6 @@ router.post('/sign', (req, res, next) => {
 })
 
 router.post('/login', (req, res, next) => {
-	console.log(req.headers['_session_token'])
 	if(!req.body.name || !req.body.pass){
 		res.json({
 			rescode: 001,
@@ -125,7 +125,6 @@ router.post('/login', (req, res, next) => {
 								resmsg: '登录成功！',
 								resresult: [{
 									name: user.name,
-									pass: user.password,
 									token: user.token
 								}]
 							});
@@ -141,32 +140,9 @@ router.post('/login', (req, res, next) => {
 			} 			
 		})
 	}
-
 })
 
-// passport-http-bearer token 中间件验证
-// 通过 header 发送 Authorization -> Bearer  + token
-// 或者通过 ?access_token = token
-
-passport.use(new Strategy(
-    function(token, done) {
-    	console.log(token)
-        User.findOne({
-            token: token
-        }, function(err, user) {
-            if (err) {
-                return done(err);
-            }
-            if (!user) {
-                return done(null, false);
-            }
-            return done(null, user);
-        });
-    }
-));
-
-router.get('/info',passport.authenticate('bearer', { session: false }),
-  function(req, res) {
+router.get('/info', passport, function(req, res) {
     res.json('{username: req.user.name}');
 });
 
