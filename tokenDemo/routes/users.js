@@ -142,8 +142,35 @@ router.post('/login', (req, res, next) => {
 	}
 })
 
-router.get('/info', passport, function(req, res) {
-    res.json('{username: req.user.name}');
+router.post('/info', passport, (req, res, next) => {
+	if (req.user) {
+		res.json({
+			rescode: 0,
+			resmsg: '',
+			resresult: [{
+				name: req.user.name,
+				token: req.user.token
+			}]
+		});		
+	}
 });
+
+router.get('/logout', passport, function(req, res, next) {
+    if (req.user) {
+    	User.findOneAndUpdate('token', {token: ''}, (err, user) => {
+    		if (err) {
+				console.log(err)
+			}
+    		if (user) {
+				res.json({
+					rescode: 0,
+					resmsg: '退出成功！',
+					resresult: []
+				});	
+    		}
+    	})
+    }
+});
+
 
 module.exports = router;

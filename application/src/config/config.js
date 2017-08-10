@@ -3,7 +3,7 @@
  */
 
 let token = window.localStorage.getItem('token');
-let URL = `${window.location.hostname}:${window.location.port}`
+let URL = `${window.location.hostname}:${window.location.port || 80}`
 
 export default {
 	URL: URL,

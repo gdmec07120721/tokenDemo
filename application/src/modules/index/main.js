@@ -5,9 +5,11 @@ import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 
 import Routes from './route/routes'
+
 import VuexCommon from '../../store/store'
 
-import config from '../../config/config'
+import axios from 'config/axios'
+import config from 'config/config'
 
 Vue.config.productionTip = false
 
@@ -28,22 +30,38 @@ const router = new VueRouter({
 function getUserInfo(){
 	return new Promise((resolve, reject) => {
 		if (config.token) {
-			console.log('登录...')
-			resolve()
+			if (store.state.common.user.name) {
+				resolve(store.state.common.user)
+			}else {
+				axios({
+					url: '/users/info',
+					method: 'post',
+				}).then(o => {
+					if (o.data.rescode === 0) {
+						resolve(o.data.resresult[0])
+					}else{
+						reject()
+					}
+				}, err => {
+					reject()
+				})
+			}
 		}else{
-			console.log('没有登录...')
-			
+			window.location.href = `//${config.URL}/login.html#/`
 		}
 	})
 }
 
+
+
 router.beforeEach((to, from, next) => {
 	getUserInfo().then(resolve => {
-		
+		store.commit('USER', resolve)
+		next()
 	},reject => {
-
+		window.location.href = `//${config.URL}/login.html#/`
 	})
-	next()
+	
 })
 
 /* eslint-disable no-new */
