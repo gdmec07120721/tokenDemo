@@ -64,7 +64,7 @@ export default {
 						self.$store.commit('USER', user)
 						self.$message({
 							message: user.resmsg,
-							type: 'warning'
+							type: 'success'
 						})
 						window.localStorage.setItem('token', user.token)
 						window.location.href = `//${config.URL}/index.html#/`
@@ -72,7 +72,7 @@ export default {
 				}, reject => {
 					this.$message({
 						message: reject,
-						type: 'warning'
+						type: 'error'
 					})
 				})
 			}
@@ -85,14 +85,14 @@ export default {
 			if (this.loginForm.name == '') {
 				this.$message({
 					message: '用户名不能为空',
-					type: 'warning'
+					type: 'error'
 				})
 				return false
 			}
 			if (this.loginForm.pass == '') {
 				this.$message({
 					message: '密码不能为空',
-					type: 'warning'
+					type: 'error'
 				})
 				return false
 			}

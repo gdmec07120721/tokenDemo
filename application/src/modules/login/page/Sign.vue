@@ -74,14 +74,14 @@ export default {
 					}else{
 						this.$message({
 							message: o.data.resmsg,
-							type: 'warning'
+							type: 'success'
 						})
 					}
 					this.$refs[formName].resetFields();
 				}, reject => {
 					this.$message({
 						message: reject,
-						type: 'warning'
+						type: 'error'
 					})
 				})
 			}
@@ -93,21 +93,21 @@ export default {
 			if (this.signForm.name == '') {
 				this.$message({
 					message: '用户名不能为空',
-					type: 'warning'
+					type: 'error'
 				})
 				return false
 			}
 			if (this.signForm.pass == '') {
 				this.$message({
 					message: '密码不能为空',
-					type: 'warning'
+					type: 'error'
 				})
 				return false
 			}
 			if (this.signForm.repass == '') {
 				this.$message({
 					message: '确认密码不能为空',
-					type: 'warning'
+					type: 'error'
 				})
 				return false
 			}
