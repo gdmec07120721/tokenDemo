@@ -8,23 +8,12 @@ var CopyWebpackPlugin = require('copy-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+var pages = utils.getEnters('./src/modules/**/*.html')
+var chunks = Object.keys(pages)
 
 var env = config.build.env
 
-var webpackConfig = merge(baseWebpackConfig, {
-  module: {
-    rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
-      extract: true
-    })
-  },
-  devtool: config.build.productionSourceMap ? '#source-map' : false,
-  output: {
-    path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
-  },
-  plugins: [
+var plugins = [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env
@@ -49,7 +38,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
+    /*new HtmlWebpackPlugin({
       filename: config.build.index,
       template: 'index.html',
       inject: true,
@@ -62,7 +51,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
-    }),
+    }),*/
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -92,6 +81,39 @@ var webpackConfig = merge(baseWebpackConfig, {
       }
     ])
   ]
+
+for(var pathName in pages){
+  var conf = {
+    filename: pathName + '.html',//生成的html存放路径，相对于path
+    template: pages[pathName],//html模板路径
+    chunks: [pathName, 'vendor', 'manifest'],//需要引入的chunk，不配置就会引入所有页面的资源
+    inject: true,//js插入的位置，true/'head'/'body'/false
+    //hash: true, //为静态资源生成hash值
+    minify: { //压缩HTML文件  
+      removeComments: true, //移除HTML中的注释
+      collapseWhitespace: true, //删除空白符与换行符
+      removeAttributeQuotes: true //删除属性引用
+    },
+    chunksSortMode: 'dependency'
+  }
+  plugins.push(new HtmlWebpackPlugin(conf))
+}
+
+
+var webpackConfig = merge(baseWebpackConfig, {
+  module: {
+    rules: utils.styleLoaders({
+      sourceMap: config.build.productionSourceMap,
+      extract: true
+    })
+  },
+  devtool: config.build.productionSourceMap ? '#source-map' : false,
+  output: {
+    path: config.build.assetsRoot,
+    filename: utils.assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+  },
+  plugins: plugins
 })
 
 if (config.build.productionGzip) {
