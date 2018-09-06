@@ -1,8 +1,4 @@
-# application
-
-> a application
-
-## Build Setup
+## 使用vue-cli脚手架实现多页访问
 
 其实主要修改的就是以下两个文件‘webpack.dev.conf.js’和‘webpack.base.conf.js’
         
